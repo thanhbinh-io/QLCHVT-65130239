@@ -1,0 +1,91 @@
+﻿@model QLCHVT_65130239.Models.SANPHAM
+@{
+    ViewBag.Title = "Cập nhật vật tư";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="mb-4 text-center">
+        <h3 class="fw-bold text-dark">Chỉnh Sửa Thông Tin Vật Tư</h3>
+        <p class="text-muted small">Cập nhật thông tin mã hàng: <span class="text-primary fw-bold">@Model.MASP</span></p>
+    </div>
+
+    @using (Html.BeginForm("SuaSanPham", "QuanLy_65130239", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.MASP) @* Quan trọng: Giữ mã để update *@
+        @Html.HiddenFor(model => model.HINHANH) @* Giữ ảnh cũ nếu không đổi *@
+        @Html.HiddenFor(model => model.MANV)
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm p-4" style="border-radius: 15px;">
+                    <div class="row">
+                        <div class="col-md-8 border-end">
+                            <h5 class="fw-bold mb-4 text-secondary"><i class="bi bi-info-circle me-2"></i>Thông tin sản phẩm</h5>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-bold">Tên vật tư</label>
+                                    @Html.EditorFor(model => model.TENSP, new { htmlAttributes = new { @class = "form-control bg-light border-0" } })
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Nhóm hàng</label>
+                                    @Html.DropDownList("MANHOM", null, htmlAttributes: new { @class = "form-select bg-light border-0" })
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Đơn vị</label>
+                                    @Html.EditorFor(model => model.DONVI, new { htmlAttributes = new { @class = "form-control bg-light border-0" } })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Giá nhập (Vnđ)</label>
+                                    @Html.EditorFor(model => model.GIANHAP, new { htmlAttributes = new { @class = "form-control bg-light border-0", type = "number" } })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Giá bán (Vnđ)</label>
+                                    @Html.EditorFor(model => model.GIABAN, new { htmlAttributes = new { @class = "form-control bg-light border-0" } })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Số lượng</label>
+                                    @Html.EditorFor(model => model.SOLUONG, new { htmlAttributes = new { @class = "form-control bg-light border-0" } })
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-bold">Mô tả</label>
+                                    @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control bg-light border-0", rows = "3" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ps-4">
+                            <h5 class="fw-bold mb-4 text-secondary text-start">Hình ảnh</h5>
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <img id="preview" src="~/Images/@Model.HINHANH" class="img-fluid rounded shadow-sm border" style="max-height: 200px; width: 100%; object-fit: cover;" />
+                                </div>
+                                <input type="file" name="uploadHinh" class="form-control form-control-sm" onchange="previewImage(event)" />
+                                <p class="extra-small text-muted mt-2 italic">Để trống nếu không muốn đổi ảnh</p>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-5">
+                                <button type="submit" class="btn btn-primary py-2 fw-bold shadow-sm rounded-pill">LƯU THAY ĐỔI</button>
+                                <a href="@Url.Action("DanhSachSanPham")" class="btn btn-light py-2 rounded-pill">Hủy bỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('preview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

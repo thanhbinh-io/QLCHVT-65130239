@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "Tổng quan hệ thống";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="mb-4">
+        <h3 class="fw-bold mb-0">Tổng quan hệ thống</h3>
+        <p class="text-muted">Cập nhật lúc: @DateTime.Now.ToString("HH:mm - dd/MM/yyyy")</p>
+    </div>
+
+    <!-- ======= TỔNG QUAN ĐƠN HÀNG ======= -->
+    <h5 class="fw-bold text-secondary mb-3">Tổng quan đơn hàng</h5>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+        <div class="col">
+            <div class="card admin-card border-top border-primary border-4 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-receipt fs-3 text-primary"></i>
+                    <p class="small text-muted fw-bold mt-2">Tổng đơn</p>
+                    <h3 class="fw-bold">@ViewBag.TongDon</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-warning border-4 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-hourglass-split fs-3 text-warning"></i>
+                    <p class="small text-muted fw-bold mt-2">Chờ duyệt</p>
+                    <h3 class="fw-bold">@ViewBag.ChoDuyet</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-info border-4 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-truck fs-3 text-info"></i>
+                    <p class="small text-muted fw-bold mt-2">Đang giao</p>
+                    <h3 class="fw-bold">@ViewBag.DangGiao</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-success border-4 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle fs-3 text-success"></i>
+                    <p class="small text-muted fw-bold mt-2">Hoàn thành</p>
+                    <h3 class="fw-bold">@ViewBag.HoanThanh</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= TỔNG QUAN NHÂN VIÊN ======= -->
+    <h5 class="fw-bold text-secondary mb-3">Tổng quan nhân viên</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        <div class="col">
+            <div class="card admin-card border-top border-dark border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-people fs-3"></i>
+                    <p class="small fw-bold text-muted mt-2">Tổng nhân viên</p>
+                    <h3 class="fw-bold">@ViewBag.TongNV</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-primary border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Nhân viên duyệt đơn</p>
+                    <h3 class="fw-bold">@ViewBag.NVDuyetDon</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-info border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Nhân viên giao hàng</p>
+                    <h3 class="fw-bold">@ViewBag.NVGiaoHang</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= TỔNG QUAN KHÁCH HÀNG ======= -->
+    <h5 class="fw-bold text-secondary mb-3">Tổng quan khách hàng</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        <div class="col">
+            <div class="card admin-card border-top border-success border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Khách hàng hoạt động</p>
+                    <h3 class="fw-bold">@ViewBag.KHHoatDong</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-danger border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Khách hàng bị khóa</p>
+                    <h3 class="fw-bold">@ViewBag.KHBiKhoa</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-dark border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Tổng khách hàng</p>
+                    <h3 class="fw-bold">@ViewBag.TongKH</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= TỔNG QUAN SẢN PHẨM ======= -->
+    <h5 class="fw-bold text-secondary mb-3">Tổng quan sản phẩm</h5>
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+        <div class="col">
+            <div class="card admin-card border-top border-primary border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Tổng sản phẩm</p>
+                    <h3 class="fw-bold">@ViewBag.TongSP</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card admin-card border-top border-warning border-4 shadow-sm">
+                <div class="card-body text-center">
+                    <p class="small fw-bold text-muted">Sản phẩm hết hàng</p>
+                    <h3 class="fw-bold">@ViewBag.SPHetHang</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= PHÍM TẮT ======= -->
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h5 class="fw-bold mb-3 text-secondary">Thao tác nhanh</h5>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="@Url.Action("ThemNhanVien")" class="btn btn-dark px-4">
+                <i class="bi bi-person-plus me-2"></i>Thêm nhân viên
+            </a>
+
+            <a href="@Url.Action("ThemSanPham")" class="btn btn-primary px-4">
+                <i class="bi bi-plus-lg me-2"></i>Thêm sản phẩm
+            </a>
+        </div>
+    </div>
+</div>

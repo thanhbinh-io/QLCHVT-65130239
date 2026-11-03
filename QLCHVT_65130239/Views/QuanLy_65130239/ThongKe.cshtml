@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "ThongKe";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+@model IEnumerable<QLCHVT_65130239.Models.ThongKeModel>
+
+<h4 class="mb-3">📊 Thống kê đơn hàng & lợi nhuận</h4>
+
+<form method="get" class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <label>Từ ngày</label>
+        <input type="date" name="tuNgay" value="@ViewBag.TuNgay" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label>Đến ngày</label>
+        <input type="date" name="denNgay" value="@ViewBag.DenNgay" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label>Kiểu thống kê</label>
+        <select name="kieu" class="form-select">
+            <option value="ngay" @(ViewBag.Kieu == "ngay" ? "selected" : "")>Theo ngày</option>
+            <option value="thang" @(ViewBag.Kieu == "thang" ? "selected" : "")>Theo tháng</option>
+            <option value="nam" @(ViewBag.Kieu == "nam" ? "selected" : "")>Theo năm</option>
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Xem thống kê</button>
+    </div>
+
+</form>
+
+
+<canvas id="chartThongKe" height="120"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<canvas id="chartThongKe" height="120"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('chartThongKe');
+
+new Chart(ctx, {
+    data: {
+        labels: @Html.Raw(Json.Encode(Model.Select(x => x.Nhan))),
+        datasets: [
+            {
+                type: 'bar',
+                label: 'Lợi nhuận (VNĐ)',
+                data: @Html.Raw(Json.Encode(Model.Select(x => x.LoiNhuan))),
+                backgroundColor: 'rgba(75,192,192,0.6)',
+                yAxisID: 'y'
+            },
+            {
+                type: 'line',
+                label: 'Số đơn',
+                data: @Html.Raw(Json.Encode(Model.Select(x => x.SoDonHang))),
+                borderColor: 'orange',
+                backgroundColor: 'orange',
+                yAxisID: 'y1'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                type: 'linear',
+                position: 'left',
+                title: { display: true, text: 'Lợi nhuận (VNĐ)' }
+            },
+            y1: {
+                type: 'linear',
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: 'Số đơn' }
+            }
+        }
+    }
+});
+</script>
+
+
+
+

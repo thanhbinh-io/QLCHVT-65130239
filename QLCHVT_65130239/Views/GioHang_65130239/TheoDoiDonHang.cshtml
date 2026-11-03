@@ -1,0 +1,258 @@
+﻿@model IEnumerable<QLCHVT_65130239.Models.DONHANG>
+
+@{
+    ViewBag.Title = "Theo dõi đơn hàng";
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --success-bg: #d1e7dd;
+        --success-text: #0f5132;
+        --warning-bg: #fff3cd;
+        --warning-text: #664d03;
+        --info-bg: #cff4fc;
+        --info-text: #055160;
+        --danger-bg: #f8d7da;
+        --danger-text: #842029;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f0f2f5;
+    }
+
+    .order-container {
+        padding: 50px 0;
+        min-height: 80vh;
+    }
+
+    /* Tiêu đề */
+    .section-header h3 {
+        color: #1e293b;
+        letter-spacing: -0.5px;
+    }
+
+    /* Card thiết kế kiểu hiện đại */
+    .card-order {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    /* Tinh chỉnh Bảng */
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table thead th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            padding: 20px;
+            border-top: none;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: #f1f5f9;
+                transform: scale(1.002);
+            }
+
+        .table tbody td {
+            padding: 20px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }
+
+    /* Status Badge kiểu hiện đại (Pill style) */
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid transparent;
+    }
+
+    .bg-soft-warning {
+        background-color: var(--warning-bg);
+        color: var(--warning-text);
+    }
+
+    .bg-soft-info {
+        background-color: var(--info-bg);
+        color: var(--info-text);
+    }
+
+    .bg-soft-success {
+        background-color: var(--success-bg);
+        color: var(--success-text);
+    }
+
+    .bg-soft-danger {
+        background-color: var(--danger-bg);
+        color: var(--danger-text);
+    }
+
+    /* Định dạng mã đơn và giá */
+    .order-id {
+        background: #f1f5f9;
+        padding: 4px 10px;
+        border-radius: 6px;
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .price-text {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.1rem;
+    }
+
+    /* Nút chi tiết */
+    .btn-detail {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-detail:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+    /* Empty state */
+    .empty-state {
+        padding: 80px 20px;
+        text-align: center;
+    }
+
+    .empty-state-icon {
+        width: 100px;
+        height: 100px;
+        background: #f1f5f9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 40px;
+        color: #cbd5e1;
+    }
+</style>
+
+<div class="order-container">
+    <div class="container">
+        <div class="row align-items-center mb-5 section-header">
+            <div class="col-md-7">
+                <h3 class="fw-bold mb-1">
+                    <i class="fas fa-box-open text-primary me-2"></i> Lịch Sử Đơn Hàng
+                </h3>
+                <p class="text-muted mb-0">Theo dõi hành trình các gói hàng vật tư của bạn</p>
+            </div>
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-light fw-bold px-4 shadow-sm" style="border-radius: 12px;">
+                    <i class="fa fa-shopping-cart me-2 text-primary"></i> Tiếp tục mua sắm
+                </a>
+            </div>
+        </div>
+
+        <div class="card card-order">
+            <div class="card-body p-0">
+                @if (Model == null || !Model.Any())
+                {
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="fas fa-receipt"></i></div>
+                        <h4 class="fw-bold text-dark">Chưa có đơn hàng nào</h4>
+                        <p class="text-muted mx-auto" style="max-width: 400px;">
+                            Bạn chưa thực hiện giao dịch nào. Hãy bắt đầu mua sắm ngay!
+                        </p>
+                        <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-primary px-5 py-2 mt-3 shadow" style="border-radius: 12px;">
+                            Xem sản phẩm
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="150">Mã đơn</th>
+                                    <th>Thời gian đặt</th>
+                                    <th>Tổng thanh toán</th>
+                                    <th class="text-center">Trạng thái</th>
+                                    <th class="text-center" width="150">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dh in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <span class="order-id">#@dh.MADH.Trim()</span>
+                                        </td>
+                                        <td>
+                                            <div class="fw-600 text-dark">@dh.NGAYLAP.ToString("dd/MM/yyyy")</div>
+                                            <div class="text-muted small">@dh.NGAYLAP.ToString("HH:mm")</div>
+                                        </td>
+                                        <td>
+                                            <span class="price-text">@String.Format("{0:N0}", dh.TONGTIEN)</span>
+                                            <span class="small text-muted fw-normal">₫</span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (dh.TRANGTHAI == "CHODUYET")
+                                            {
+                                                <span class="status-badge bg-soft-warning"><i class="fas fa-spinner fa-spin"></i> Chờ duyệt</span>
+                                            }
+                                            else if (dh.TRANGTHAI == "DANGGIAO")
+                                            {
+                                                <span class="status-badge bg-soft-info"><i class="fas fa-shipping-fast"></i> Đang giao</span>
+                                            }
+                                            else if (dh.TRANGTHAI == "HOANTAT")
+                                            {
+                                                <span class="status-badge bg-soft-success"><i class="fas fa-check-double"></i> Hoàn tất</span>
+                                            }
+                                            else if (dh.TRANGTHAI == "DAHUY")
+                                            {
+                                                <span class="status-badge bg-soft-danger"><i class="fas fa-ban"></i> Đã hủy</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("ChiTietDonHang", "GioHang_65130239", new { id = dh.MADH.Trim() })"
+                                               class="btn btn-sm btn-detail">
+                                                Xem chi tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

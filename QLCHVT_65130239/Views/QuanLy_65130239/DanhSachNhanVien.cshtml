@@ -1,0 +1,203 @@
+﻿@model IEnumerable<QLCHVT_65130239.Models.NHANVIEN>
+
+@{
+    ViewBag.Title = "Quản lý nhân viên";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<style>
+    body {
+        background-color: #f9fafb;
+    }
+
+    .admin-card {
+        border-radius: 15px;
+        border: none;
+        background: #ffffff;
+    }
+
+    .table thead th {
+        background-color: #f1f5f9;
+        color: #475569;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 15px;
+    }
+
+    .table tbody td {
+        padding: 15px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Badge Roles */
+    .badge-role-1 {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    /* Quản lý */
+    .badge-role-2 {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+    /* Duyệt đơn */
+    .badge-role-3 {
+        background-color: #e0f2fe;
+        color: #0369a1;
+    }
+    /* Giao hàng */
+    .badge-role-0 {
+        background-color: #fee2e2;
+        color: #dc2626;
+    }
+    /* Nghỉ việc */
+
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background-color: #6366f1;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+    .row-resigned {
+        background-color: #fcfcfc;
+        opacity: 0.7;
+    }
+
+        .row-resigned .avatar-circle {
+            background-color: #94a3b8 !important;
+        }
+
+    /* Search Bar Style */
+    .search-wrapper {
+        max-width: 500px;
+    }
+
+    .input-group-search {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+        .input-group-search:focus-within {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+        }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">Hệ thống nhân sự</h3>
+            <p class="text-muted small">Hiển thị tất cả nhân viên (bao gồm đã nghỉ việc)</p>
+        </div>
+        <a href="@Url.Action("ThemNhanVien", "QuanLy_65130239")" class="btn btn-primary shadow-sm px-4 fw-bold" style="border-radius: 10px;">
+            <i class="bi bi-person-plus-fill me-2"></i> Thêm nhân viên
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12 col-md-6">
+            <form action="@Url.Action("DanhSachNhanVien", "QuanLy_65130239")" method="get">
+                <div class="input-group input-group-search shadow-sm">
+                    <span class="input-group-text bg-white border-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" name="searchString" class="form-control border-0 ps-0"
+                           placeholder="Tìm theo tên hoặc mã nhân viên..."
+                           value="@ViewBag.CurrentSearch">
+                    <button class="btn btn-dark px-4" type="submit">Tìm</button>
+                    @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
+                    {
+                        <a href="@Url.Action("DanhSachNhanVien")" class="btn btn-light border-0 px-3" title="Xóa tìm kiếm">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card admin-card shadow-sm">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-person-exclamation display-1 text-muted"></i>
+                    <p class="mt-3 text-muted">Không tìm thấy nhân viên nào khớp với từ khóa "<strong>@ViewBag.CurrentSearch</strong>"</p>
+                    <a href="@Url.Action("DanhSachNhanVien")" class="btn btn-outline-primary btn-sm mt-2">Quay lại danh sách</a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Nhân viên</th>
+                                <th>Mã NV</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Vai trò</th>
+                                <th class="pe-4 text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="@(item.VAITRO == 0 ? "row-resigned" : "")">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle me-3">
+                                                @item.TENNV.Substring(0, 1).ToUpper()
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold @(item.VAITRO == 0 ? "text-muted" : "text-dark")">@item.TENNV</div>
+                                                @if (item.VAITRO == 0)
+                                                {<small class="text-danger italic">Tài khoản bị khóa</small>}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><code class="fw-bold">@item.MANV.Trim()</code></td>
+                                    <td class="small text-muted">@item.EMAIL</td>
+                                    <td class="fw-medium">@item.SDT</td>
+                                    <td>
+                                        @if (item.VAITRO == 1)
+                                        {<span class="badge badge-role-1 rounded-pill px-3">Quản lý</span> }
+                                        else if (item.VAITRO == 2)
+                                        { <span class="badge badge-role-2 rounded-pill px-3">Duyệt đơn</span> }
+                                        else if (item.VAITRO == 3)
+                                        { <span class="badge badge-role-3 rounded-pill px-3">Giao hàng</span> }
+                                        else
+                                        {
+                                            <span class="badge badge-role-0 rounded-pill px-3">
+                                                <i class="bi bi-lock-fill me-1"></i> Nghỉ việc
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="pe-4 text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="@Url.Action("SuaNhanVien", new { id = item.MANV.Trim() })" class="btn btn-outline-warning btn-sm border-0" title="Sửa">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a href="@Url.Action("ChiTietNhanVien", new { id = item.MANV.Trim() })" class="btn btn-outline-info btn-sm border-0" title="Chi tiết">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

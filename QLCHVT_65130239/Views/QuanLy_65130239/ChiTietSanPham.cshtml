@@ -1,0 +1,112 @@
+﻿@model QLCHVT_65130239.Models.SANPHAM
+@{
+    ViewBag.Title = "Chi tiết vật tư";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<style>
+    /* Thêm các định dạng Badge giống trang danh sách để đồng bộ */
+    .badge-soft-danger {
+        background-color: #fee2e2;
+        color: #dc2626;
+        border: none;
+        padding: 6px 12px;
+    }
+
+    .badge-soft-success {
+        background-color: #dcfce7;
+        color: #166534;
+        border: none;
+        padding: 6px 12px;
+    }
+
+    .badge-soft-info {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        border: none;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="mb-4">
+        <a href="@Url.Action("DanhSachSanPham")" class="text-decoration-none text-muted small">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+        <div class="row g-0">
+            <div class="col-md-5 bg-light d-flex align-items-center justify-content-center p-4 border-end">
+                @if (!string.IsNullOrEmpty(Model.HINHANH))
+                {
+                    <img src="~/Images/@Model.HINHANH" class="img-fluid rounded-3 shadow-sm" style="max-height: 450px; object-fit: cover;" />
+                }
+                else
+                {
+                    <div class="text-center">
+                        <i class="bi bi-box-seam text-muted" style="font-size: 8rem;"></i>
+                        <p class="text-muted small">Sản phẩm chưa có ảnh</p>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-7 p-5">
+                <span class="badge badge-soft-info mb-2 rounded-pill px-3">
+                    @(Model.NHOMSANPHAM != null ? Model.NHOMSANPHAM.TENNHOM : "Vật tư")
+                </span>
+                <h2 class="fw-bold text-dark mb-1">@Model.TENSP</h2>
+                <p class="text-muted mb-4">Mã hệ thống: <span class="badge bg-light text-dark border">@Model.MASP</span></p>
+
+                <h6 class="fw-bold text-uppercase small text-primary mb-3">Thông số kỹ thuật</h6>
+                <table class="table table-sm table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted py-2" style="width: 150px;">Đơn vị tính:</td>
+                            <td class="fw-bold py-2">@Model.DONVI</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted py-2">Giá nhập kho:</td>
+                            <td class="fw-bold py-2 text-secondary">@String.Format("{0:N0}", Model.GIANHAP) đ</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted py-2">Giá niêm yết:</td>
+                            <td class="fw-bold py-2 text-primary fs-5">@String.Format("{0:N0}", Model.GIABAN) đ</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted py-2">Số lượng tồn:</td>
+                            <td class="py-2">
+                                @* Logic cảnh báo hàng ít đồng bộ với trang danh sách *@
+                                @if (Model.SOLUONG <= 20)
+                                {
+                                    <span class="badge badge-soft-danger rounded-pill fw-bold">
+                                        <i class="bi bi-exclamation-triangle me-1"></i> @Model.SOLUONG @Model.DONVI (Sắp hết hàng)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-soft-success rounded-pill fw-bold">
+                                        <i class="bi bi-check2-circle me-1"></i> @Model.SOLUONG @Model.DONVI
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+
+                <div class="mt-4">
+                    <h6 class="fw-bold text-uppercase small text-primary mb-2">Mô tả sản phẩm</h6>
+                    <div class="p-3 bg-light rounded-3 text-secondary small" style="min-height: 100px; line-height: 1.6;">
+                        @(string.IsNullOrEmpty(Model.MOTA) ? "Không có mô tả chi tiết cho vật tư này." : Model.MOTA)
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <a href="@Url.Action("SuaSanPham", new { id = Model.MASP.Trim() })" class="btn btn-warning px-4 fw-bold text-white rounded-pill shadow-sm">
+                        <i class="bi bi-pencil-square me-2"></i> Chỉnh sửa thông tin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+﻿@model QLCHVT_65130239.Models.KHACHHANG
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "TrangChu_65130239")">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Hồ sơ cá nhân</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0"><i class="fas fa-user-circle me-2"></i>THÔNG TIN TÀI KHOẢN</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-4 text-center border-end">
+                            <img src="https://ui-avatars.com/api/?name=@Server.UrlEncode(Model.TENKH)&background=0d6efd&color=fff&size=150"
+                                 class="rounded-circle img-thumbnail mb-3" alt="Avatar">
+                            <h5 class="fw-bold">@Model.TENKH</h5>
+                            <p class="text-muted small">Mã KH: @Model.MAKH</p>
+                            <div class="badge @(Model.TRANGTHAI == 1 ? "bg-success" : "bg-danger") rounded-pill">
+                                @(Model.TRANGTHAI == 1 ? "Tài khoản hoạt động" : "Tài khoản bị hạn chế")
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 ps-md-4">
+                            <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Thông tin liên hệ</h6>
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 text-muted small text-uppercase">Họ và tên</label>
+                                <div class="col-sm-8 fw-medium">@Model.TENKH</div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 text-muted small text-uppercase">Số điện thoại</label>
+                                <div class="col-sm-8 fw-medium">@(Model.SDT ?? "Chưa cập nhật")</div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 text-muted small text-uppercase">Email</label>
+                                <div class="col-sm-8 fw-medium">@(Model.EMAIL ?? "Chưa cập nhật")</div>
+                            </div>
+
+                            
+
+                            <h6 class="text-primary fw-bold mt-4 mb-3 border-bottom pb-2">Thông tin đăng nhập</h6>
+
+                           
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="@Url.Action("TheoDoiDonHang", "GioHang_65130239")" class="btn btn-outline-success">
+                            <i class="fas fa-box me-1"></i> Lịch sử đơn hàng
+                        </a>
+                        <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-secondary">
+                            Đóng
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+
+    .fw-medium {
+        font-weight: 500;
+        color: #333;
+    }
+
+    label {
+        letter-spacing: 0.5px;
+    }
+</style>

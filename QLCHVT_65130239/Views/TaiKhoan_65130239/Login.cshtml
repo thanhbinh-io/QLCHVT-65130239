@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+    // Đảm bảo layout này tồn tại trong thư mục Shared của bạn
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<style>
+    .login-container {
+        padding: 30px 20px;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .card-login {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .login-header {
+        background: #0d6efd;
+        padding: 30px 20px;
+        text-align: center;
+        color: white;
+    }
+
+    .btn-custom {
+        border-radius: 50px;
+        padding: 12px 30px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        }
+
+    .form-floating > label {
+        padding-left: 20px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding-left: 20px;
+    }
+</style>
+
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="card card-login">
+                    <div class="login-header">
+                        <i class="fas fa-user-circle fa-3x mb-2"></i>
+                        <h4 class="fw-bold mb-0">ĐĂNG NHẬP</h4>
+                        <small style="opacity: 0.8">Chào mừng bạn quay trở lại!</small>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
+                                <i class="fas fa-exclamation-triangle me-2"></i> @ViewBag.Error
+                            </div>
+                        }
+
+                        @* ĐOẠN QUAN TRỌNG NHẤT: Thêm "new { returnUrl = Request.QueryString["returnUrl"] }"
+        để gửi lại link trang cũ lên Controller khi bấm submit.
+                        *@
+                        @using (Html.BeginForm("Login", "TaiKhoan_65130239", new { returnUrl = Request.QueryString["returnUrl"] }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput"
+                                       name="Email" placeholder="name@example.com"
+                                       value="@ViewBag.Email" required>
+                                <label for="floatingInput">Email hoặc Tài khoản</label>
+                            </div>
+
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="floatingPassword"
+                                       name="MatKhau" placeholder="Password" required>
+                                <label for="floatingPassword">Mật khẩu</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 btn-custom mb-3">
+                                ĐĂNG NHẬP
+                            </button>
+                        }
+
+                        <div class="text-center">
+                            <p class="text-muted small mb-2">Chưa có tài khoản?</p>
+                            <a href="@Url.Action("Register", "TaiKhoan_65130239")" class="fw-bold text-decoration-none">
+                                Đăng ký thành viên mới
+                            </a>
+                        </div>
+                        <div class="text-end mb-3">
+                            <a href="@Url.Action("ForgotPassword", "TaiKhoan_65130239")"
+                               class="text-decoration-none small">
+                                Quên hoặc đổi mật khẩu?
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="@Url.Action("Index", "TrangChu_65130239")" class="text-muted text-decoration-none">
+                        <i class="fas fa-arrow-left me-1"></i> Quay về trang chủ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

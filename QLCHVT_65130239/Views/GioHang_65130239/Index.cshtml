@@ -1,0 +1,287 @@
+﻿@model IEnumerable<QLCHVT_65130239.Models.CartItem>
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #0056b3;
+        --bg-light: #f8f9fa;
+        --text-main: #333;
+    }
+
+    body {
+        background-color: #f4f7f6;
+        color: var(--text-main);
+    }
+
+    /* Layout tối ưu */
+    .cart-wrapper {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+
+    .cart-main {
+        flex: 1;
+        background: white;
+        border-radius: 12px;
+        shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .cart-sidebar {
+        width: 350px;
+        position: sticky;
+        top: 20px;
+    }
+
+    /* Table gọn gàng */
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table th {
+            border-top: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #777;
+            padding: 15px;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px 15px;
+            border-color: #f1f1f1;
+        }
+
+    .product-img-cart {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .product-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+        color: var(--primary-color);
+    }
+
+    .product-code {
+        font-size: 0.75rem;
+        color: #999;
+    }
+
+    /* Form số lượng tinh tế */
+    .quantity-control {
+        max-width: 110px;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+        .quantity-control input {
+            border: none;
+            background: #f8f9fa;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .quantity-control .btn {
+            background: #f8f9fa;
+            border: none;
+            transition: all 0.2s;
+        }
+
+            .quantity-control .btn:hover {
+                background: #e9ecef;
+            }
+
+    /* Sidebar - Tổng tiền */
+    .summary-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+    }
+
+    .summary-total {
+        border-top: 1px dashed #ddd;
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+
+    .price-final {
+        color: #d32f2f;
+        font-size: 1.4rem;
+        font-weight: 800;
+    }
+
+    .btn-checkout {
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: transform 0.2s;
+    }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+    /* Alert mini */
+    .alert-custom {
+        border-radius: 8px;
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+</style>
+
+<div class="container pb-5">
+    @* Thông báo *@
+    @if (TempData["Success"] != null || TempData["Error"] != null)
+    {
+        <div class="mt-3">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-custom alert-dismissible fade show">
+                    <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-custom alert-dismissible fade show">
+                    <i class="fas fa-exclamation-triangle me-2"></i> @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    }
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb" style="font-size: 0.85rem;">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "TrangChu_65130239")" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Giỏ hàng</li>
+        </ol>
+    </nav>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5 bg-white rounded-3 shadow-sm">
+            <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty" style="width: 100px; opacity: 0.3">
+            <h5 class="mt-3 text-muted">Giỏ hàng đang trống</h5>
+            <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-outline-primary btn-sm mt-2 px-4">Quay lại mua sắm</a>
+        </div>
+    }
+    else
+    {
+        <div class="cart-wrapper">
+            @* CỘT TRÁI: DANH SÁCH SẢN PHẨM *@
+            <div class="cart-main">
+                <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-shopping-basket me-2 text-primary"></i>Sản phẩm (@Model.Count())</h5>
+                    <a href="@Url.Action("Index", "TrangChu_65130239")" class="text-decoration-none small"><i class="fas fa-reply me-1"></i>Thêm sản phẩm</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Thành tiền</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="@Url.Content("~/Images/" + item.HINHANH)" class="product-img-cart me-3">
+                                            <div>
+                                                <div class="product-name text-truncate" style="max-width: 200px;">@item.TENSP</div>
+                                                <div class="product-code text-muted small">Đơn giá: @item.GIABAN.ToString("N0")₫</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @using (Html.BeginForm("CapNhatSoLuong", "GioHang_65130239", FormMethod.Get))
+                                        {
+                                            <div class="input-group quantity-control mx-auto">
+                                                <input type="hidden" name="id" value="@item.MASP.Trim()" />
+                                                <input type="number" name="soLuong" class="form-control form-control-sm" value="@item.SOLUONG" min="1">
+                                                <button type="submit" class="btn btn-sm" title="Lưu"><i class="fas fa-sync-alt text-primary" style="font-size: 0.7rem;"></i></button>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="text-end fw-bold text-dark">
+                                        @item.THANHTIEN.ToString("N0")₫
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="@Url.Action("XoaGioHang", "GioHang_65130239", new { maSP = item.MASP.Trim() })"
+                                           class="text-danger p-2" onclick="return confirm('Xóa sản phẩm?')">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @* CỘT PHẢI: TỔNG TIỀN & THANH TOÁN (STICKY) *@
+            <aside class="cart-sidebar">
+                <div class="summary-card">
+                    <h6 class="fw-bold mb-4">THÔNG TIN ĐƠN HÀNG</h6>
+
+                    <div class="summary-item">
+                        <span class="text-muted">Tạm tính:</span>
+                        <span>@(((decimal)ViewBag.TongTien).ToString("N0"))₫</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="text-muted">Phí vận chuyển:</span>
+                        <span>10,000₫</span>
+                    </div>
+
+                    <div class="summary-item summary-total">
+                        <span class="fw-bold">Tổng cộng:</span>
+                        <div class="text-end">
+                            <div class="price-final">@(((decimal)ViewBag.TongTien + 10000).ToString("N0"))₫</div>
+                            <small class="text-muted">(Đã bao gồm VAT)</small>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("DatHang", "GioHang_65130239", FormMethod.Post, new { @class = "mt-4" }))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">ĐỊA CHỈ GIAO HÀNG</label>
+                            <textarea name="diaChiGiao" class="form-control form-control-sm border-primary"
+                                      rows="2" placeholder="Số nhà, tên đường..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 btn-checkout">
+                            <i class="fas fa-shopping-bag me-2"></i>ĐẶT HÀNG NGAY
+                        </button>
+                    }
+
+                    
+                </div>
+            </aside>
+        </div>
+    }
+</div>

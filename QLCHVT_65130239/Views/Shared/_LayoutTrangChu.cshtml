@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title - Quản lý vật tư điện nước</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Navbar tinh tế hơn */
+        .navbar {
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            font-size: 1.4rem;
+        }
+
+        /* Tùy chỉnh thanh tìm kiếm */
+        .search-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 1.5rem;
+        }
+
+        .search-input {
+            border-radius: 20px 0 0 20px !important;
+            border: none;
+            padding-left: 1.2rem;
+        }
+
+        .search-btn {
+            border-radius: 0 20px 20px 0 !important;
+            padding: 0 1.2rem;
+            border: none;
+        }
+
+        /* Icon tiện ích */
+        .nav-icon-link {
+            color: white;
+            position: relative;
+            font-size: 1.1rem;
+            padding: 0.5rem 0.8rem !important;
+            transition: all 0.3s ease;
+        }
+
+            .nav-icon-link:hover {
+                color: #ffd800 !important;
+                transform: translateY(-2px);
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 0.65rem;
+            padding: 0.25em 0.45em;
+            border-radius: 50%;
+        }
+
+        /* User Menu */
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+        /* Ẩn mũi tên mặc định */
+        .user-name-text {
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+
+        /* Footer (Giữ nguyên logic cũ nhưng thêm padding) */
+        .footer-custom {
+            background-color: #0D6EFD;
+            color: white;
+            padding: 60px 0 20px 0;
+        }
+
+            .footer-custom h5 {
+                font-size: 1rem;
+                font-weight: bold;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                position: relative;
+                padding-bottom: 10px;
+            }
+
+                .footer-custom h5::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    width: 40px;
+                    height: 2px;
+                    background-color: rgba(255,255,255,0.5);
+                }
+
+            .footer-custom a {
+                color: rgba(255,255,255,0.8);
+                text-decoration: none;
+                transition: all 0.3s;
+                font-size: 0.9rem;
+            }
+
+                .footer-custom a:hover {
+                    color: #ffd800 !important;
+                    padding-left: 5px;
+                }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section, [id] {
+            scroll-margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "TrangChu_65130239")">
+                <i class="fas fa-bolt me-1"></i>VẬT TƯ ĐIỆN NƯỚC <span style="color: #ffd800;">THANH BÌNH</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-th-large me-1"></i> Danh mục
+                        </a>
+                        <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "TrangChu_65130239")#sp-moi"><i class="fas fa-star me-2 text-warning"></i>Sản phẩm mới</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "TrangChu_65130239")#thiet-bi-dien"><i class="fas fa-plug me-2 text-danger"></i>Thiết bị điện</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "TrangChu_65130239")#thiet-bi-nuoc"><i class="fas fa-faucet me-2 text-primary"></i>Thiết bị nước</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="https://zalo.me/0865271702" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i>  Zalo
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="search-container">
+                    @* Sửa "Index" thành "TimSanPham" để khi nhấn tìm kiếm nó nhảy sang trang kết quả *@
+                    @using (Html.BeginForm("TimSanPham", "TrangChu_65130239", FormMethod.Get, new { @class = "input-group" }))
+                    {
+                        <input name="searchString" class="form-control search-input shadow-none"
+                               type="search" placeholder="Bạn cần tìm gì hôm nay?"
+                               value="@Request.QueryString["searchString"]">
+
+                        <button class="btn btn-warning search-btn" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    }
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <a href="@Url.Action("Index", "GioHang_65130239")" class="nav-link nav-icon-link cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge bg-danger cart-badge">@(Session["CartCount"] ?? 0)</span>
+                    </a>
+
+                    <div class="nav-item dropdown user-dropdown">
+                        @if (Session["USER_ID"] == null)
+                        {
+                            <a class="btn btn-outline-light rounded-pill px-4 ms-2" style="font-size: 0.85rem;" href="@Url.Action("Login", "TaiKhoan_65130239")">
+                                <i class="fas fa-user me-1"></i> Đăng nhập
+                            </a>
+                        }
+                        else
+                        {
+                    <a class="nav-link dropdown-toggle nav-icon-link ms-2 d-flex align-items-center" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                        <span class="user-name-text d-inline ms-1">
+                             @Session["TenUser"]
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userMenu">
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("ChiTietTaiKhoan", "TrangChu_65130239")">
+                                <i class="fas fa-id-card me-2 text-info"></i>Thông tin tài khoản
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("TheoDoiDonHang", "GioHang_65130239")">
+                                <i class="fas fa-box-open me-2 text-success"></i>Đơn hàng của tôi
+                            </a>
+                        </li>
+                        @if (Session["VAITRO"]?.ToString() == "QuanLy")
+                        {
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Admin")">
+                                    <i class="fas fa-user-shield me-2 text-primary"></i>Trang quản trị
+                                </a>
+                            </li>
+                        }
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="@Url.Action("Logout", "TaiKhoan_65130239")">
+                                <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid p-0">
+        <div class="container py-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h5>Hỗ trợ khách hàng</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Cam kết chất lượng</a></li>
+                        <li><a href="#">Hướng dẫn đặt hàng</a></li>
+                        <li><a href="#">Lợi ích khi mua hàng</a></li>
+                        <li><a href="#">Vận chuyển và giao nhận</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Điều khoản & Chính sách</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách đổi trả hàng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Liên hệ chi nhánh</h5>
+                    <ul class="list-unstyled text-white-50 shadow-none">
+                        <li class="mb-2"><i class="fas fa-phone-alt me-2 text-warning"></i> Nha Trang: 0865 271 702</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2 text-warning"></i> vat-tu-Thanh-Binh@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="text-uppercase">Chứng nhận</h5>
+                    <img src="@Url.Content("~/images/Da_Thong_Bao_Bo_Cong_Thuong.png")"
+                         alt="BCT" class="img-fluid  p-2 rounded"
+                         style="max-width: 160px;"
+                         onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Logo_BCT.svg/1200px-Logo_BCT.svg.png'">
+                </div>
+            </div>
+            <hr class="mt-5 mb-4" style="opacity: 0.1">
+            <div class="text-center text-white-50">
+                <small>
+                    © @DateTime.Now.Year - Hệ thống quản lý vật tư điện nước <br />
+                    Đồ án Phát triển ứng dụng Web | MSSV: 65130239
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+    @if (Session["USER_ID"] == null)
+    {
+        <script>
+            // Lắng nghe sự kiện click vào link giỏ hàng khi chưa đăng nhập
+            document.querySelectorAll('.cart-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    alert("Vui lòng đăng nhập để xem giỏ hàng!");
+                    window.location.href = '@Url.Action("Login", "TaiKhoan_65130239")';
+                });
+            });
+        </script>
+    }
+</body>
+</html>

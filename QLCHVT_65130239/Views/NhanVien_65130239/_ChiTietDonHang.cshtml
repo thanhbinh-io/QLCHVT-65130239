@@ -1,0 +1,57 @@
+﻿@model QLCHVT_65130239.Models.DONHANG
+@{ Layout = null; }
+
+<div class="modal-header border-0">
+    <h5 class="fw-bold"><i class="bi bi-box-seam me-2"></i>Chi Tiết Đơn Hàng #@Model.MADH.Trim()</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row mb-4">
+        <div class="col-6">
+            <small class="text-muted d-block">Khách hàng:</small>
+            <strong class="text-primary">@Model.KHACHHANG.TENKH</strong>
+        </div>
+        <div class="col-6">
+            <small class="text-muted d-block">Ngày đặt:</small>
+            <strong>@Model.NGAYLAP.ToString("dd/MM/yyyy HH:mm")</strong>
+        </div>
+        <div class="col-12 mt-2">
+            <small class="text-muted d-block">Địa chỉ giao:</small>
+            <small>@Model.DIACHIGIAO</small>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Vật tư</th>
+                    <th class="text-center">SL</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-end">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ct in Model.CTDHs)
+                {
+                    <tr>
+                        <td>@ct.SANPHAM.TENSP</td>
+                        <td class="text-center">@ct.SOLUONG</td>
+                        <td class="text-end">@String.Format("{0:N0}", ct.DONGIA) đ</td>
+                        <td class="text-end fw-bold">@String.Format("{0:N0}", ct.SOLUONG * ct.DONGIA) đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-3 p-3 bg-light rounded-4">
+        <div class="small">Phí vận chuyển: @String.Format("{0:N0}", Model.PHIVANCHUYEN) đ</div>
+        <div class="fw-bold fs-5 text-danger">Tổng: @String.Format("{0:N0}", Model.TONGTIEN) đ</div>
+    </div>
+</div>
+
+<div class="modal-footer border-0">
+    <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Đóng</button>
+</div>

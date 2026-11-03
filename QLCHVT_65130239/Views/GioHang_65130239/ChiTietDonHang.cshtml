@@ -1,0 +1,76 @@
+﻿@model QLCHVT_65130239.Models.DONHANG
+
+@{
+    ViewBag.Title = "Chi tiết đơn hàng #" + Model.MADH;
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<div class="container my-5" style="min-height: 70vh;">
+    <div class="card shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+        <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Chi tiết đơn hàng: @Model.MADH.Trim()</h5>
+            <span class="badge bg-white text-primary fw-bold">@Model.TRANGTHAI</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-primary border-bottom pb-2"><strong><i class="fas fa-shipping-fast me-2"></i>Thông tin giao hàng</strong></h6>
+                    <p class="mb-1"><strong>Người nhận:</strong> @Model.KHACHHANG.TENKH</p>
+                    <p class="mb-1"><strong>Số điện thoại:</strong> @Model.KHACHHANG.SDT</p>
+                    <p class="mb-1"><strong>Địa chỉ giao:</strong> @Model.DIACHIGIAO</p>
+                    <p class="mb-1"><strong>Ngày đặt:</strong> @Model.NGAYLAP.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6 class="text-primary border-bottom pb-2"><strong><i class="fas fa-wallet me-2"></i>Thanh toán</strong></h6>
+                    <p class="mb-1 text-muted">Phương thức: Thanh toán khi nhận hàng (COD)</p>
+                    <h4 class="text-danger mt-2">Tổng cộng: @String.Format("{0:0,0}", Model.TONGTIEN) ₫</h4>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="100">Hình ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-end">Đơn giá</th>
+                            <th class="text-end">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.CTDHs)
+                        {
+                            var thanhTien = detail.SOLUONG * detail.DONGIA;
+                            <tr>
+                                <td>
+                                    <img src="~/Images/@detail.SANPHAM.HINHANH"
+                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;" />
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark">@detail.SANPHAM.TENSP</div>
+                                    <small class="text-muted">Mã SP: @detail.MASP.Trim()</small>
+                                </td>
+                                <td class="text-center fw-bold">@detail.SOLUONG</td>
+                                <td class="text-end">@String.Format("{0:0,0}", detail.DONGIA) ₫</td>
+                                <td class="text-end fw-bold text-primary">@String.Format("{0:0,0}", thanhTien) ₫</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Tổng thanh toán:</strong></td>
+                            <td class="text-end"><h4 class="text-danger mb-0 fw-bold">@String.Format("{0:0,0}", Model.TONGTIEN) ₫</h4></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="mt-4 border-top pt-3">
+                <a href="@Url.Action("TheoDoiDonHang", "GioHang_65130239")" class="btn btn-outline-primary px-4 shadow-sm" style="border-radius: 10px;">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại đơn hàng của tôi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

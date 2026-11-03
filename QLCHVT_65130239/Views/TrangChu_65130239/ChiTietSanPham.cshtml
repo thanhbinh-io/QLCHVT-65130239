@@ -1,0 +1,78 @@
+﻿@model QLCHVT_65130239.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row bg-white p-4 rounded shadow-sm">
+        <div class="col-md-5">
+            <div class="border rounded p-2 text-center">
+                <img src="@(!string.IsNullOrEmpty(Model.HINHANH) ? Url.Content("~/Images/" + Model.HINHANH) : "https://via.placeholder.com/400")"
+                     alt="@Model.TENSP" class="img-fluid" style="max-height: 400px; object-fit: contain;" />
+            </div>
+        </div>
+
+        <div class="col-md-7 ps-md-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                        
+                    <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-light btn-sm border shadow-sm mb-2">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                </ol>
+            </nav>
+
+            <h2 class="fw-bold">@Model.TENSP</h2>
+            <p class="text-muted small">Mã SP: @Model.MASP</p>
+
+            <hr />
+
+            <div class="mb-4">
+                <span class="h3 text-danger fw-bold">@String.Format("{0:0,0}", Model.GIABAN) ₫</span>
+                <span class="text-muted"> / @Model.DONVI</span>
+            </div>
+
+            <div class="mb-4">
+                <p class="mb-1 fw-bold">Tình trạng kho:</p>
+                @if (Model.SOLUONG > 0)
+                {
+                    <span class="badge bg-success-subtle text-success border border-success px-3 py-2">
+                        <i class="fas fa-check-circle me-1"></i> Còn hàng: <strong>@Model.SOLUONG</strong> @Model.DONVI
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger-subtle text-danger border border-danger px-3 py-2">
+                        <i class="fas fa-exclamation-triangle me-1"></i> Hết hàng (Liên hệ đặt trước)
+                    </span>
+                }
+            </div>
+
+            <div class="mb-4 p-3 bg-light rounded">
+                <p class="fw-bold mb-1">Mô tả sản phẩm:</p>
+                <div class="text-secondary">
+                    @if (!string.IsNullOrEmpty(Model.MOTA))
+                    {
+                        @Html.Raw(Model.MOTA)
+                    }
+                    else
+                    {
+                        <span>Sản phẩm chất lượng cao cung cấp bởi điện nước Thanh Bình.</span>
+                    }
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex mt-4">
+                <a href="@Url.Action("ThemGioHang", "GioHang_65130239", new { maSP = Model.MASP, url = Request.Url.ToString() })"
+                   class="btn btn-primary btn-lg px-5 shadow-sm">
+                    <i class="fas fa-cart-plus me-2"></i> THÊM VÀO GIỎ HÀNG
+                </a>
+                <a href="https://zalo.me/0865271702" class="btn btn-outline-info btn-lg px-4">
+                    <i class="fab fa-facebook-messenger me-2"></i> Tư vấn Zalo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

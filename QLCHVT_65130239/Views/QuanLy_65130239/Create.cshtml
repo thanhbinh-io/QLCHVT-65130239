@@ -1,0 +1,121 @@
+﻿@model QLCHVT_65130239.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Thêm vật tư";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <a href="@Url.Action("DanhSachSanPham")" class="text-decoration-none text-muted small">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+        <h3 class="fw-bold text-dark mt-2">Thêm Sản Phẩm Mới</h3>
+    </div>
+
+    @using (Html.BeginForm("Create", "QuanLy_65130239", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius: 15px;">
+                    <h5 class="fw-bold mb-4 text-secondary">Thông tin cơ bản</h5>
+
+                    <div class="row g-3">
+                        @* Cập nhật khối Mã sản phẩm tại đây *@
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Mã sản phẩm</label>
+                            @Html.EditorFor(model => model.MASP, new { htmlAttributes = new { @class = "form-control bg-light border-0", placeholder = "Ví dụ: SP001" } })
+                            @* Dòng thông báo lỗi khi trùng mã *@
+                            @Html.ValidationMessageFor(model => model.MASP, "", new { @class = "text-danger small fw-italic mt-1 d-block" })
+                        </div>
+
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold">Tên vật tư / Thiết bị</label>
+                            @Html.EditorFor(model => model.TENSP, new { htmlAttributes = new { @class = "form-control bg-light border-0", placeholder = "Nhập tên sản phẩm..." } })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Nhóm hàng</label>
+                            @Html.DropDownList("MANHOM", null, "-- Chọn phân loại --", htmlAttributes: new { @class = "form-select bg-light border-0" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Đơn vị tính</label>
+                            @Html.EditorFor(model => model.DONVI, new { htmlAttributes = new { @class = "form-control bg-light border-0", placeholder = "Cái, mét, bộ..." } })
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Mô tả sản phẩm</label>
+                            @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control bg-light border-0", rows = "4", placeholder = "Nhập đặc điểm kỹ thuật hoặc ghi chú..." })
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mt-5 mb-4 text-secondary">Giá cả & Kho hàng</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Giá nhập</label>
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.GIANHAP, new { htmlAttributes = new { @class = "form-control bg-light border-0", type = "number" } })
+                                <span class="input-group-text bg-light border-0 small">Vnđ</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Giá bán</label>
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.GIABAN, new { htmlAttributes = new { @class = "form-control bg-light border-0", type = "number" } })
+                                <span class="input-group-text bg-light border-0 small">Vnđ</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Số lượng</label>
+                            @Html.EditorFor(model => model.SOLUONG, new { htmlAttributes = new { @class = "form-control bg-light border-0", type = "number" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4 mb-4 text-center" style="border-radius: 15px;">
+                    <h5 class="fw-bold mb-4 text-secondary text-start">Hình ảnh đại diện</h5>
+
+                    <div class="image-preview-container mb-3">
+                        <img id="preview" src="~/Images/no-image.png" class="img-fluid rounded shadow-sm" style="max-height: 250px; width: 100%; object-fit: cover; display: none;" />
+                        <div id="placeholder" class="py-5 border border-2 border-dashed rounded bg-light">
+                            <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                            <p class="text-muted small">Chưa có ảnh nào được chọn</p>
+                        </div>
+                    </div>
+
+                    <input type="file" name="uploadHinh" id="uploadHinh" class="form-control form-control-sm" accept="image/*" onchange="previewImage(event)" />
+                    <p class="text-muted extra-small mt-2">Dung lượng tối đa 2MB (JPG, PNG)</p>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary py-3 fw-bold shadow-sm btn-shortcut">
+                        <i class="bi bi-check-circle me-2"></i> HOÀN TẤT THÊM MỚI
+                    </button>
+                    <a href="@Url.Action("DanhSachSanPham")" class="btn btn-outline-secondary py-2 border-0">Hủy bỏ</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('preview');
+                var placeholder = document.getElementById('placeholder');
+
+                output.src = reader.result;
+                output.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

@@ -1,0 +1,86 @@
+﻿@model QLCHVT_65130239.Models.NHANVIEN
+
+@{
+    ViewBag.Title = "Chỉnh sửa nhân viên";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container py-4">
+    <div class="mb-4">
+        <a href="@Url.Action("DanhSachNhanVien")" class="btn btn-outline-secondary btn-sm border shadow-sm mb-2">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+        <h3 class="fw-bold text-dark mt-2">Cập nhật tài khoản nhân viên</h3>
+    </div>
+
+    <div class="card admin-card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.MANV)
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-muted">Mã nhân viên</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="bi bi-key"></i></span>
+                            <input type="text" class="form-control bg-light border-0 fw-bold" value="@Model.MANV.Trim()" disabled />
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label fw-bold">Họ và tên</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-person"></i></span>
+                            @Html.EditorFor(model => model.TENNV, new { htmlAttributes = new { @class = "form-control border-start-0", required = "required" } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Email liên lạc</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-envelope"></i></span>
+                            @Html.EditorFor(model => model.EMAIL, new { htmlAttributes = new { @class = "form-control border-start-0", type = "email" } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Số điện thoại</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-telephone"></i></span>
+                            @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control border-start-0" } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Mật khẩu truy cập</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-lock"></i></span>
+                            @Html.EditorFor(model => model.MATKHAU, new { htmlAttributes = new { @class = "form-control border-start-0", type = "password" } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Vai trò công việc</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-shield-check"></i></span>
+                            <select name="VAITRO" class="form-select border-start-0">
+                                <option value="1" @(Model.VAITRO == 1 ? "selected" : "")>Quản lý hệ thống</option>
+                                <option value="2" @(Model.VAITRO == 2 ? "selected" : "")>Duyệt đơn hàng</option>
+                                <option value="3" @(Model.VAITRO == 3 ? "selected" : "")>Nhân viên giao vận</option>
+                                <option value="0" @(Model.VAITRO == 0 ? "selected" : "") class="text-danger">Đã nghỉ việc / Khóa tài khoản</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 border-top pt-4">
+                    <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
+                        <i class="bi bi-check-circle me-2"></i>Cập nhật thông tin
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

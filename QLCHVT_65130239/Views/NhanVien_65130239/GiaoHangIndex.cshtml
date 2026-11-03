@@ -1,0 +1,411 @@
+﻿@model IEnumerable<QLCHVT_65130239.Models.DONHANG>
+@{
+    ViewBag.Title = "Quản lý giao hàng";
+    Layout = "~/Views/Shared/_LayoutNhanVien.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        --danger-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        --dark-bg: #1e293b; /* Màu xanh đen chủ đạo */
+    }
+
+    /* 1. Sửa Header: Tăng padding-bottom để text "Chào..." nằm cao hẳn lên */
+    .page-header {
+        background: var(--dark-bg);
+        padding: 4rem 0 5rem 0; /* Đẩy chiều cao header lên */
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        margin-bottom: -70px; /* Vẫn giữ margin âm để tab gối lên header */
+        color: white;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* 2. Đổi nền trắng thành màu xanh đêm trong suốt (Glassmorphism) */
+    .custom-tabs {
+        background: rgba(15, 23, 42, 0.8); /* Màu xanh đen đậm, trong suốt 80% */
+        backdrop-filter: blur(12px); /* Hiệu ứng mờ ảo */
+        padding: 12px;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Viền mảnh lấp lánh */
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        position: relative;
+        z-index: 10;
+    }
+
+        /* 3. Chỉnh lại chữ trên Tab khi chưa Active để không bị chìm */
+        .custom-tabs .nav-link {
+            color: rgba(255, 255, 255, 0.6) !important;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+    /* 4. Đẩy nội dung Card xuống một chút để không dính vào Tab */
+    
+
+    /* Giữ nguyên các Style cho Order Card và Button như cũ... */
+
+    .custom-tabs .nav-link {
+        border-radius: 15px;
+        font-weight: 600;
+        color: rebeccapurple;
+        padding: 15px 10px;
+        transition: all 0.3s;
+    }
+
+        .custom-tabs .nav-link.active[data-bs-target="#tab-cho"] {
+            background: var(--warning-gradient);
+            color: white;
+        }
+
+        .custom-tabs .nav-link.active[data-bs-target="#tab-dang"] {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .custom-tabs .nav-link.active[data-bs-target="#tab-lichsu"] {
+            background: #334155;
+            color: white;
+        }
+
+    body {
+        background-color: #f1f5f9;
+        font-family: 'Lexend', sans-serif;
+    }
+    /* Card thiết kế lại */
+    .order-card {
+        background: white;
+        border: none;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+        .order-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+        }
+
+    .card-top {
+        padding: 25px 20px;
+        background: #f8fafc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #e2e8f0;
+    }
+
+    /* Nội dung Card */
+    .card-body-custom {
+        padding: 20px;
+    }
+
+    .customer-avatar {
+        width: 45px;
+        height: 45px;
+        background: #eff6ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .info-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .info-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    /* Khu vực tiền tệ (COD) */
+    .cod-badge {
+        background: #fff1f2;
+        color: #e11d48;
+        padding: 12px;
+        border-radius: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 15px 0;
+    }
+
+    /* Nút bấm Gradient */
+    .btn-gradient-success {
+        background: var(--success-gradient);
+        border: none;
+        color: white;
+    }
+
+    .btn-gradient-danger {
+        background: var(--danger-gradient);
+        border: none;
+        color: white;
+    }
+
+    .btn-gradient-primary {
+        background: var(--primary-gradient);
+        border: none;
+        color: white;
+    }
+
+    .btn-action-lg {
+        border-radius: 15px;
+        padding: 12px;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    /* Thêm vào phần <style> của GiaoHangIndex */
+    #tab-lichsu .card {
+        background: rgba(15, 23, 42, 0.8); /* Nền tối trong suốt */
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    #tab-lichsu table {
+        color: white !important; /* Chữ trắng cho dễ đọc trên nền tối */
+    }
+
+    #tab-lichsu .table-dark {
+        --bs-table-bg: rgba(0, 0, 0, 0.3);
+    }
+
+    #tab-lichsu .text-muted {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    /* Làm mờ nền phía sau Modal */
+    .modal-backdrop {
+        background-color: rgba(15, 23, 42, 0.9) !important;
+    }
+
+    /* Modal theo phong cách Glassmorphism */
+    #detailModal .modal-content {
+        background: #ffffff; /* Hoặc dùng rgba(255,255,255,0.9) nếu muốn nhìn xuyên thấu */
+        border-radius: 25px;
+        border: none;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .bg-light.rounded-4 {
+        background-color: #f8fafc !important; /* Màu xám nhạt cho phần tổng tiền */
+    }
+</style>
+
+<div class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-8">
+                <span class="badge bg-primary mb-2">Shipper Dashboard</span>
+                <h2 class="fw-bold mb-0">Chào, @Session["TenNV"]!</h2>
+            </div>
+            <div class="col-4 text-end">
+                <div class="d-inline-block text-center mx-2">
+                    <div class="h4 mb-0 mx-2 fw-bold">@Model.Count(x => x.TRANGTHAI.Trim() == "DANGGIAO")</div>
+                    <div class="small mx-2 opacity-75">Đơn đang đi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <ul class="nav nav-pills custom-tabs mb-4 row g-0" id="pills-tab">
+        <li class="nav-item col-4 text-center">
+            <button class="nav-link active w-100" data-bs-toggle="pill" data-bs-target="#tab-cho">
+                <i class="bi bi-box-seam d-block fs-4 mb-1"></i>
+                Chờ nhận (@Model.Count(x => x.TRANGTHAI.Trim() == "DADUYET"))
+            </button>
+        </li>
+        <li class="nav-item col-4 text-center">
+            <button class="nav-link w-100" data-bs-toggle="pill" data-bs-target="#tab-dang">
+                <i class="bi bi-truck d-block fs-4 mb-1"></i>
+                Đang giao (@Model.Count(x => x.TRANGTHAI.Trim() == "DANGGIAO"))
+            </button>
+        </li>
+        <li class="nav-item col-4 text-center">
+            <button class="nav-link w-100" data-bs-toggle="pill" data-bs-target="#tab-lichsu">
+                <i class="bi bi-clock-history d-block fs-4 mb-1"></i>
+                Lịch sử
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-cho">
+            <div class="row g-4">
+                @foreach (var item in Model.Where(x => x.TRANGTHAI.Trim() == "DADUYET"))
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="order-card">
+                            <div class="card-top">
+                                <span class="fw-bold text-muted small">#@item.MADH.Trim()</span>
+                                <span class="badge rounded-pill bg-warning text-dark">Sẵn sàng</span>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="d-flex align-items-center gap-3 mb-4">
+                                    <div class="customer-avatar">@item.KHACHHANG.TENKH.Substring(0, 1)</div>
+                                    <div>
+                                        <div class="fw-bold fs-5">@item.KHACHHANG.TENKH</div>
+                                        <div class="text-muted small">@item.NGAYLAP.ToString("HH:mm - dd/MM")</div>
+                                    </div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-icon bg-light text-primary"><i class="bi bi-geo-alt"></i></div>
+                                    <div class="small">@item.DIACHIGIAO</div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-4">
+                                        <button onclick="showDetail('@item.MADH.Trim()')" class="btn btn-outline-secondary btn-action-lg w-100">Chi tiết</button>
+                                    </div>
+                                    <div class="col-8">
+                                        @using (Html.BeginForm("GiaoHang_NhanDon", "NhanVien_65130239", new { id = item.MADH.Trim() }))
+                                        {
+                                            <button type="submit" class="btn btn-gradient-primary btn-action-lg w-100">Nhận đơn</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-dang">
+            <div class="row g-4">
+                @foreach (var item in Model.Where(x => x.TRANGTHAI.Trim() == "DANGGIAO"))
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="order-card" style="border-top: 5px solid #00f2fe;">
+                            <div class="card-top">
+                                <span class="fw-bold text-primary">ĐƠN ĐANG ĐI</span>
+                                <a href="tel:@item.KHACHHANG.SDT" class="btn btn-success btn-sm rounded-circle"><i class="bi bi-telephone"></i></a>
+                            </div>
+                            <div class="card-body-custom">
+                                <h5 class="fw-bold mb-1">@item.KHACHHANG.TENKH</h5>
+                                <div class="text-primary fw-bold mb-3 small"><i class="bi bi-phone me-1"></i>@item.KHACHHANG.SDT</div>
+
+                                <div class="info-group">
+                                    <div class="info-icon bg-light text-danger"><i class="bi bi-geo-alt-fill"></i></div>
+                                    <div class="small fw-medium">@item.DIACHIGIAO</div>
+                                </div>
+
+                                <div class="cod-badge">
+                                    <span class="small fw-bold">TỔNG THU (COD)</span>
+                                    <span class="fs-4 fw-bold">@String.Format("{0:N0}", item.TONGTIEN)đ</span>
+                                </div>
+
+                                <div class="row g-2">
+                                    <div class="col-12 mb-2">
+                                        <button onclick="showDetail('@item.MADH.Trim()')" class="btn btn-light w-100 py-2 rounded-4 fw-bold text-muted small">XEM SẢN PHẨM</button>
+                                    </div>
+                                    <div class="col-6">
+                                        @using (Html.BeginForm("GiaoHang_KetThuc", "NhanVien_65130239", new { id = item.MADH.Trim(), ketqua = "THANHCONG" }))
+                                        {
+                                            <button type="submit" class="btn btn-gradient-success btn-action-lg w-100">Thành công</button>
+                                        }
+                                    </div>
+                                    <div class="col-6">
+                                        @using (Html.BeginForm("GiaoHang_KetThuc", "NhanVien_65130239", new { id = item.MADH.Trim(), ketqua = "THATBAI" }))
+                                        {
+                                            <button type="submit" class="btn btn-gradient-danger btn-action-lg w-100">Thất bại</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-lichsu">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4 py-3">Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Trạng thái</th>
+                            <th class="text-end pe-4">Số tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.TRANGTHAI.Trim() == "HOANTAT" || x.TRANGTHAI.Trim() == "DAHUY"))
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-muted">#@item.MADH.Trim()</td>
+                                <td>
+                                    <div class="fw-bold">@item.KHACHHANG.TENKH</div>
+                                    <div class="small text-muted">@item.NGAYLAP.ToShortDateString()</div>
+                                </td>
+                                <td>
+                                    @if (item.TRANGTHAI.Trim() == "HOANTAT")
+                                    {
+                                        <span class="badge bg-success-subtle text-success px-3">Thành công</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger px-3">Đã hủy</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4 fw-bold">@String.Format("{0:N0}", item.TONGTIEN)đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">
+            <div id="detailContent"></div>
+        </div>
+    </div>
+</div>
+@section scripts {
+<script>
+    function showDetail(id) {
+        // 1. Hiện loading và mở Modal
+        $('#detailContent').html('<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>');
+        var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
+
+        // 2. Gọi AJAX để lấy nội dung từ Action XemChiTietDonHang
+        $.ajax({
+            url: '@Url.Action("XemChiTietDonHang", "NhanVien_65130239")',
+            type: 'GET',
+            data: { id: id },
+            success: function (data) {
+                // 3. Đổ dữ liệu trả về vào div nội dung
+                $('#detailContent').html(data);
+            },
+            error: function () {
+                $('#detailContent').html('<div class="alert alert-danger">Lỗi tải dữ liệu!</div>');
+            }
+        });
+    }
+</script>
+}

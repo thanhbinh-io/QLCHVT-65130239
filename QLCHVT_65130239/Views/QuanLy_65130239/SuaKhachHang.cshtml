@@ -1,0 +1,148 @@
+﻿@model QLCHVT_65130239.Models.KHACHHANG
+
+@{
+    ViewBag.Title = "Cập nhật khách hàng";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container-fluid pt-2 pb-4">
+    <div class="mb-2 ms-lg-5">
+        <a href="@Url.Action("DanhSachKhachHang")" class="text-decoration-none text-secondary fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+            <i class="bi bi-arrow-left-short fs-5"></i> QUAY LẠI
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mx-auto" style="border-radius: 10px; max-width: 800px; background-color: #ffffff;">
+        <div class="card-header bg-white border-0 pt-3 px-4 pb-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                        <i class="bi bi-person-check fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0">Thiết lập tài khoản</h5>
+                    </div>
+                </div>
+                <span class="badge bg-light text-dark border fw-normal" style="font-size: 0.7rem;">ID: @Model.MAKH.Trim()</span>
+            </div>
+            <hr class="mt-3 mb-0 opacity-5">
+        </div>
+
+        <div class="card-body p-4">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.MAKH)
+
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.75rem;">HỌ VÀ TÊN KHÁCH HÀNG</label>
+                        <div class="input-group input-group-sm custom-group">
+                            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-person text-muted"></i></span>
+                            @Html.EditorFor(model => model.TENKH, new { htmlAttributes = new { @class = "form-control border-start-0 ps-0", placeholder = "Nhập tên khách hàng..." } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.75rem;">EMAIL LIÊN LẠC</label>
+                        <div class="input-group input-group-sm custom-group">
+                            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                            @Html.EditorFor(model => model.EMAIL, new { htmlAttributes = new { @class = "form-control border-start-0 ps-0" } })
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.75rem;">SỐ ĐIỆN THOẠI</label>
+                        <div class="input-group input-group-sm custom-group">
+                            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-telephone text-muted"></i></span>
+                            @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control border-start-0 ps-0" } })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.75rem;">MẬT KHẨU TRUY CẬP</label>
+                        <div class="input-group input-group-sm custom-group shadow-none">
+                            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-key text-muted"></i></span>
+                            @Html.EditorFor(model => model.MATKHAU, new
+                            {
+                                htmlAttributes = new { @class = "form-control border-x-0 ps-0", type = "password", id = "matkhauInput" }
+                            })
+                            <button class="btn btn-link text-decoration-none border border-start-0 border-secondary-subtle" type="button" id="btnTogglePassword">
+                                <i class="bi bi-eye text-muted" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.75rem;">TRẠNG THÁI HỆ THỐNG</label>
+                        <div class="input-group input-group-sm custom-group">
+                            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-shield-check text-muted"></i></span>
+                            <select name="TRANGTHAI" class="form-select border-start-0 ps-0 fw-bold @(Model.TRANGTHAI == 1 ? "text-success" : "text-danger")">
+                                <option value="1" @(Model.TRANGTHAI == 1 ? "selected" : "")>● Đang hoạt động</option>
+                                <option value="2" @(Model.TRANGTHAI == 2 ? "selected" : "")>● Bị hạn chế</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 d-flex justify-content-end align-items-center gap-3">
+                    <a href="@Url.Action("DanhSachKhachHang")" class="text-decoration-none text-muted small fw-bold">Bỏ qua</a>
+                    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow-sm" style="border-radius: 6px; font-size: 0.85rem;">
+                        LƯU THAY ĐỔI <i class="bi bi-arrow-right-short"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Input Group Style */
+    .custom-group .input-group-text,
+    .custom-group .form-control,
+    .custom-group .form-select,
+    .custom-group button {
+        border-color: #e9ecef !important;
+        background-color: #fcfcfc;
+    }
+
+    .custom-group:focus-within .form-control,
+    .custom-group:focus-within .input-group-text,
+    .custom-group:focus-within button {
+        border-color: #0d6efd !important;
+        background-color: #fff;
+    }
+
+    .border-x-0 {
+        border-left: none !important;
+        border-right: none !important;
+    }
+
+    /* Hiệu ứng mượt */
+    .form-control, .form-select {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+    }
+
+    /* Giảm bớt độ dày của nhãn */
+    .form-label {
+        letter-spacing: 0.3px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnTogglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('matkhauInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        });
+    </script>
+}

@@ -1,0 +1,355 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+
+    var spMoi = ViewBag.SanPhamMoi as List<QLCHVT_65130239.Models.SANPHAM>;
+    var spDien = ViewBag.ThietBiDien as List<QLCHVT_65130239.Models.SANPHAM>;
+    var spNuoc = ViewBag.ThietBiNuoc as List<QLCHVT_65130239.Models.SANPHAM>;
+    var nhomSP = ViewBag.NhomSP as List<QLCHVT_65130239.Models.NHOMSANPHAM>;
+}
+
+<style>
+    :root {
+        --primary-blue: #0056b3;
+        --light-blue: #e3f2fd;
+        --accent-blue: #00adef;
+    }
+
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://codienhaiau.com/wp-content/uploads/2020/12/Thiet-bi-dien-cong-nghiep.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: white;
+        min-height: 450px;
+        padding: 80px 0;
+        border-radius: 0 0 50px 50px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-title {
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-section .lead {
+        font-size: 1.4rem;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .service-card {
+        border: none;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+        height: 100%;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+    .service-icon {
+        color: var(--accent-blue);
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .section-title {
+        color: var(--primary-blue);
+        font-weight: 700;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background: var(--accent-blue);
+            bottom: 0;
+            left: 20%;
+        }
+
+    .product-card {
+        border: none;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .product-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+    .product-img-wrapper {
+        position: relative;
+        padding-top: 100%;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+
+        .product-img-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
+            transition: transform 0.5s;
+        }
+
+    .product-card:hover .product-img-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .product-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+        .product-title:hover {
+            color: var(--accent-blue) !important;
+        }
+
+    .price-tag {
+        color: #d32f2f;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-top: auto;
+    }
+
+    .btn-add-cart {
+        background-color: white;
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
+        border-radius: 20px;
+        font-weight: 600;
+        transition: all 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+        .btn-add-cart:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+    /* Style cho Banner Carousel */
+    .main-carousel {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 50px;
+    }
+
+    .carousel-item img {
+        height: 100%; /* Bạn có thể điều chỉnh độ cao tùy ý */
+        object-fit: cover; /* Giúp ảnh không bị móp méo */
+        width: 100%;
+    }
+
+    .carousel-indicators [data-bs-target] {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--accent-blue);
+    }
+</style>
+
+<section class="hero-section text-center d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="display-4 hero-title mb-3 fw-bold">Cung cấp vật Tư Điện Nước chính hãng<br> Thanh Bình</h1>
+                <p class="lead mb-0">Giải pháp toàn diện cho công trình của bạn. Chất lượng đảm bảo - Giá cả cạnh tranh - Giao hàng nhanh chóng tại NHA TRANG.</p>
+            </div>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.CurrentFilter))
+    {
+        <div class="container mt-4">
+            <div class="alert alert-info shadow-sm d-flex justify-content-between align-items-center">
+                <span>
+                    <i class="fas fa-search me-2"></i>
+                    Kết quả tìm kiếm cho: <strong>"@ViewBag.CurrentFilter"</strong>
+                </span>
+                <a href="@Url.Action("Index", "TrangChu_65130239")" class="btn btn-sm btn-outline-secondary">Xóa tìm kiếm</a>
+            </div>
+        </div>
+    }
+</section>
+
+<div class="container mb-5" style="margin-top: -80px; position: relative; z-index: 10;">
+    <div class="row g-4">
+        <div class="col-md-3 col-6">
+            <div class="service-card text-center">
+                <i class="fas fa-truck-fast service-icon"></i>
+                <h6 class="fw-bold">Giao Hàng Tận Nơi</h6>
+                <small class="text-muted">Nội thành Nha Trang</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="service-card text-center">
+                <i class="fas fa-shield-alt service-icon"></i>
+                <h6 class="fw-bold">Bảo Hành Chính Hãng</h6>
+                <small class="text-muted">Cam kết 100%</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="service-card text-center">
+                <i class="fas fa-tags service-icon"></i>
+                <h6 class="fw-bold">Giá Cả Cạnh Tranh</h6>
+                <small class="text-muted">Chiết khấu cao</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="service-card text-center">
+                <i class="fas fa-headset service-icon"></i>
+                <h6 class="fw-bold">Hỗ Trợ 24/7</h6>
+                <small class="text-muted">Tư vấn kỹ thuật</small>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mb-5">
+    <div id="bannerCarousel" class="carousel slide main-carousel" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+            <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img src="@Url.Content("~/Images/Banner1.png")" class="d-block w-100" alt="Banner 1">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="@Url.Content("~/Images/Banner2.png")" class="d-block w-100" alt="Banner 2">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="@Url.Content("~/Images/Banner3.png")" class="d-block w-100" alt="Banner 3">
+            </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<section id="sp-moi" class="container mb-5">
+    <div class="text-center"><h2 class="section-title">SẢN PHẨM MỚI</h2></div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        @if (spMoi != null)
+        {
+            foreach (var item in spMoi)
+            {
+                <div class="col">
+                    <div class="product-card">
+                        @* Đã thêm .Trim() *@
+                        <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })">
+                            <div class="product-img-wrapper">
+                                <img src="@(!string.IsNullOrEmpty(item.HINHANH) ? Url.Content("~/Images/" + item.HINHANH) : "https://via.placeholder.com/300")" alt="@item.TENSP">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            @* Đã thêm .Trim() *@
+                            <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })" class="product-title" title="@item.TENSP">@item.TENSP</a>
+                            <div class="price-tag">@String.Format("{0:0,0}", item.GIABAN) ₫ <small class="text-muted fw-normal" style="font-size: 0.8rem">/@item.DONVI</small></div>
+                            @* Đã thêm .Trim() *@
+                            <a href="@Url.Action("ThemGioHang", "GioHang_65130239", new { maSP = item.MASP.Trim(), url = Request.Url.ToString() })" class="btn btn-add-cart">
+                                <i class="fas fa-cart-plus me-1"></i> Thêm giỏ hàng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<section class="container mb-5">
+    <div id="thiet-bi-dien" class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h3 class="text-uppercase fw-bold m-0" style="color: var(--primary-blue);"><i class="fas fa-bolt me-2"></i>Thiết Bị Điện</h3>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 mb-5">
+        @if (spDien != null)
+        {
+            foreach (var item in spDien)
+            {
+                <div class="col">
+                    <div class="product-card">
+                        <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })">
+                            <div class="product-img-wrapper">
+                                <img src="@(!string.IsNullOrEmpty(item.HINHANH) ? Url.Content("~/Images/" + item.HINHANH) : "https://via.placeholder.com/300")" alt="@item.TENSP">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })" class="product-title">@item.TENSP</a>
+                            <div class="price-tag">@String.Format("{0:0,0}", item.GIABAN) ₫<small class="text-muted fw-normal" style="font-size: 0.8rem">/@item.DONVI</small></div>
+                            <a href="@Url.Action("ThemGioHang", "GioHang_65130239", new { maSP = item.MASP.Trim(), url = Request.Url.ToString() })" class="btn btn-add-cart"><i class="fas fa-cart-plus me-1"></i> Thêm giỏ hàng</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div id="thiet-bi-nuoc" class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h3 class="text-uppercase fw-bold m-0" style="color: var(--accent-blue);"><i class="fas fa-tint me-2"></i>Thiết Bị Nước</h3>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        @if (spNuoc != null)
+        {
+            foreach (var item in spNuoc)
+            {
+                <div class="col">
+                    <div class="product-card">
+                        <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })">
+                            <div class="product-img-wrapper">
+                                <img src="@(!string.IsNullOrEmpty(item.HINHANH) ? Url.Content("~/Images/" + item.HINHANH) : "https://via.placeholder.com/300")" alt="@item.TENSP">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <a href="@Url.Action("ChiTietSanPham", "TrangChu_65130239", new { id = item.MASP.Trim() })" class="product-title">@item.TENSP</a>
+                            <div class="price-tag">@String.Format("{0:0,0}", item.GIABAN) ₫<small class="text-muted fw-normal" style="font-size: 0.8rem">/@item.DONVI</small></div>
+                            <a href="@Url.Action("ThemGioHang", "GioHang_65130239", new { maSP = item.MASP.Trim(), url = Request.Url.ToString() })" class="btn btn-add-cart"><i class="fas fa-cart-plus me-1"></i> Thêm giỏ hàng</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>

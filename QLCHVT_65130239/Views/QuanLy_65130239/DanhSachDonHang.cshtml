@@ -1,0 +1,178 @@
+﻿@model IEnumerable<QLCHVT_65130239.Models.DONHANG>
+@{
+    var grid = new WebGrid(
+        source: Model,
+        rowsPerPage: 15,   // mỗi trang 20 đơn
+        canPage: true,
+        canSort: false
+    );
+}
+
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+    Layout = "~/Views/Shared/_LayoutQuanLy.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h4 class="fw-bold text-dark mb-1">
+                <i class="bi bi- receipt-cutoff me-2 text-primary"></i>QUẢN LÝ ĐƠN HÀNG
+            </h4>
+            <p class="text-muted small mb-0">Hiển thị danh sách các giao dịch trong hệ thống</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            @using (Html.BeginForm("DanhSachDonHang", "QuanLy_65130239", FormMethod.Get, new { @class = "d-inline-block" }))
+            {
+                <div class="input-group input-group-sm shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                    <input type="text" name="search" class="form-control border-0 ps-3" placeholder="Mã đơn hoặc tên khách..." style="width: 220px;">
+                    <button class="btn btn-primary px-3 border-0" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+
+                @grid.GetHtml(
+                    tableStyle: "table table-hover align-middle mb-0",
+                    headerStyle: "text-secondary small fw-bold text-uppercase bg-light",
+                    footerStyle: "text-center",
+                    mode: WebGridPagerModes.All,
+                    columns: new[]
+                    {
+                        grid.Column("MADH", "Mã đơn hàng", format: @<text>
+        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-2 py-2">
+            #@item.MADH.Trim()
+        </span>
+                        </text>),
+
+                 grid.Column("KHACHHANG", "Thông tin khách hàng", format: @<text>
+                            <div class="fw-bold text-dark">@item.KHACHHANG.TENKH</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                <i class="bi bi-telephone me-1"></i> @item.KHACHHANG.SDT
+                            </div>
+                </text>),
+
+         grid.Column("NGAYLAP", "Ngày lập đơn", format: @<text>
+                    <i class="bi bi-calendar3 me-1"></i>
+                    @item.NGAYLAP.ToString("dd/MM/yyyy HH:mm")
+        </text>),
+
+ grid.Column("TONGTIEN", "Giá trị đơn", style: "text-end", format: @<text>
+            @String.Format("{0:N0}", item.TONGTIEN) <small class="text-muted">đ</small>
+    </text>),
+
+grid.Column("TRANGTHAI", "Trạng thái", style: "text-center", format: @<text>
+        @{
+                        var st = item.TRANGTHAI.Trim();
+                        var cls = st == "CHODUYET" ? "status-warning"
+                                : st == "DANGGIAO" ? "status-info"
+                                : st == "HOANTHANH" ? "status-success"
+                                : "status-danger";
+
+                        var txt = st == "CHODUYET" ? "Chờ duyệt"
+                                : st == "DANGGIAO" ? "Đang giao"
+                                : st == "HOANTHANH" ? "Hoàn thành"
+                                : "Đã hủy";
+        }
+        <span class="status-pill @cls">@txt</span>
+    </text>),
+
+grid.Column("", "Thao tác", style: "text-center", format: @<text>
+        <div class="d-flex justify-content-center gap-2">
+            <a href="@Url.Action("ChiTietDonHang", new { id = item.MADH.Trim() })"
+               class="btn btn-action btn-view" title="Xem chi tiết">
+                <i class="bi bi-eye"></i>
+            </a>
+            <a href="@Url.Action("SuaDonHang", new { id = item.MADH.Trim() })"
+               class="btn btn-action btn-edit" title="Chỉnh sửa">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+        </div>
+    </text>)
+}
+)
+
+            </div>
+        </div>
+
+       
+    </div>
+</div>
+
+<style>
+    /* Status Pill Style - Tinh tế hơn Badge mặc định */
+    .status-pill {
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+        min-width: 100px;
+    }
+
+    .status-warning {
+        background-color: #fff8e1;
+        color: #f57c00;
+    }
+
+    .status-info {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .status-success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .status-danger {
+        background-color: #ffebee;
+        color: #d32f2f;
+    }
+
+    /* Action Buttons Style */
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s;
+        border: 1px solid #edf2f7;
+        background: #fff;
+    }
+
+    .btn-view {
+        color: #6366f1;
+    }
+
+        .btn-view:hover {
+            background-color: #6366f1;
+            color: #fff;
+            border-color: #6366f1;
+        }
+
+    .btn-edit {
+        color: #10b981;
+    }
+
+        .btn-edit:hover {
+            background-color: #10b981;
+            color: #fff;
+            border-color: #10b981;
+        }
+
+    /* Table Hover */
+    .table tbody tr:hover {
+        background-color: #fcfdfe !important;
+    }
+
+    .table th {
+        letter-spacing: 0.05em;
+    }
+</style>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6318e18b273f4640b484fc55395c982b" Name="Diagram1">
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.CTDH" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.CTGH" Width="1.5" PointX="8.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.DONHANG" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.GIOHANG" Width="1.5" PointX="6" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.KHACHHANG" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.NHANVIEN" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.NHOMSANPHAM" Width="1.5" PointX="3.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.SANPHAM" Width="1.5" PointX="6" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLCHVTTB_65130239Model.sysdiagram" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_CTDH_DH" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_CTDH_SP" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_CTGH_GH" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_CTGH_SP" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_DH_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_DH_NV_DUYET" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_DH_NV_GIAO" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_GH_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_SP_NV" ManuallyRouted="false" />
+        <AssociationConnector Association="QLCHVTTB_65130239Model.FK_SP_NHOM" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
